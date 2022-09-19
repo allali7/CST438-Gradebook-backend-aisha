@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.cst438.domain.Assignment;
 import com.cst438.domain.AssignmentGrade;
+import com.cst438.domain.AssignmentGradeRepository;
 import com.cst438.domain.AssignmentListDTO;
 import com.cst438.domain.AssignmentListDTO.AssignmentDTO;
 import com.cst438.domain.AssignmentRepository;
@@ -39,6 +40,9 @@ public class AssignmentController {
 	
 	@Autowired
 	AssignmentRepository assignmentRepository;
+	
+	@Autowired
+	AssignmentGradeRepository assignmentGradeRepository;
 	
 	
 	//Step1: client sends data in post 
@@ -124,7 +128,7 @@ public class AssignmentController {
 	    @DeleteMapping("/assignment/{assignment_id}")
 	    @Transactional
 	    public void deleteAssignment(@PathVariable int assignment_id) {
-	    	Assignment assignment = assignmentRepository.findById(assignment_id).get();  	
+	    	Assignment assignment = assignmentRepository.findById(assignment_id);  	
 	    	if (assignment == null) {
 	    		throw  new ResponseStatusException( HttpStatus.BAD_REQUEST, "Assignment_id not valid");
 	    	}

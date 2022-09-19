@@ -21,7 +21,7 @@ import org.junit.Assert;
 
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
-
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 
@@ -31,6 +31,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.cst438.controllers.AssignmentController;
+import com.cst438.controllers.EnrollmentController;
+import com.cst438.controllers.GradeBookController;
 import com.cst438.domain.Assignment;
 import com.cst438.domain.AssignmentGrade;
 import com.cst438.domain.AssignmentGradeRepository;
@@ -49,8 +51,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 
 
-@ContextConfiguration(classes = { AssignmentController.class })
-
+@ContextConfiguration(classes = { GradeBookController.class, AssignmentController.class })
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest
 
 public class JunitTestAssignment {
@@ -167,7 +169,7 @@ public class JunitTestAssignment {
 			grade.setScore("");
 			grade.setStudentEnrollment(enrollment);
 			
-			given(assignmentRepository.findById(1).get()).willReturn(assignment); // ?? .get()?? 
+			given(assignmentRepository.findById(1)).willReturn(assignment);
 			given(assignmentGradeRepository.save(any())).willReturn(grade);
 			
 			MockHttpServletResponse response = mvc.perform(MockMvcRequestBuilders.delete("/assignment/1").accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
@@ -213,7 +215,7 @@ public class JunitTestAssignment {
 			ag.setStudentEnrollment(enrollment);
 
 			given(assignmentGradeRepository.save(any())).willReturn(ag);
-			given(assignmentRepository.findById(1).get()).willReturn(assignment);// .get() ok? 
+			given(assignmentRepository.findById(1)).willReturn(assignment);
 			given(assignmentGradeRepository.findByAssignmentIdAndStudentEmail(1, TEST_STUDENT_EMAIL)).willReturn(null);
 
 			response = mvc.perform(MockMvcRequestBuilders.get("/gradebook/1").accept(MediaType.APPLICATION_JSON))
