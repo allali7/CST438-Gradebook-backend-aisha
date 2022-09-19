@@ -14,6 +14,11 @@ public class AssignmentListDTO {
 		public String courseTitle;
 		public int courseId;
 
+		
+		// we created this constructor which takes no arguments for the TestAddAssignment test
+		public AssignmentDTO() {};
+		
+		
 		public AssignmentDTO(int assignmentId, int courseId, String assignmentName, String dueDate,
 				String courseTitle) {
 			this.assignmentId = assignmentId;

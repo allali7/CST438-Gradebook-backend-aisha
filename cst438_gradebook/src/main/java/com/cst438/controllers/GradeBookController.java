@@ -57,6 +57,7 @@ public class GradeBookController {
 		return result;
 	}
 	
+	// id is the id of the assignment, will give us the names of all the students and grades
 	@GetMapping("/gradebook/{id}")
 	public GradebookDTO getGradebook(@PathVariable("id") Integer assignmentId  ) {
 		
@@ -89,6 +90,8 @@ public class GradeBookController {
 		return gradebook;
 	}
 	
+	
+	// teacher will use this to send grades to registration service
 	@PostMapping("/course/{course_id}/finalgrades")
 	@Transactional
 	public void calcFinalGrades(@PathVariable int course_id) {
