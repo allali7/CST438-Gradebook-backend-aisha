@@ -1,5 +1,6 @@
 package com.cst438;
 
+
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.verify;
 
 import java.util.Optional;
 
+import com.cst438.controllers.AssignmentController;
 import com.cst438.controllers.GradeBookController;
 import com.cst438.domain.Assignment;
 import com.cst438.domain.AssignmentDTO;
@@ -49,7 +51,7 @@ import org.springframework.test.context.ContextConfiguration;
  *  addFilters=false turns off security.  (I could not get security to work in test environment.)
  *  WebMvcTest is needed for test environment to create Repository classes.
  */
-@ContextConfiguration(classes = { GradeBookController.class })
+@ContextConfiguration(classes = { GradeBookController.class, AssignmentController.class })
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest
 public class JunitTestGradebook {
@@ -247,7 +249,8 @@ public class JunitTestGradebook {
 		verify(assignmentGradeRepository, times(1)).save(updatedag);
 	}
 	
-		
+	
+
 
 	private static String asJsonString(final Object obj) {
 		try {
