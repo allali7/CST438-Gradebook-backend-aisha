@@ -7,7 +7,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,6 +34,7 @@ import java.util.Optional;
 
 @RestController
 // from AssignmentListDTO we need a class AssignmentDTO
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 public class AssignmentController {
 	
 	//we need these to look things up in the course table and assignment table 
@@ -42,8 +45,19 @@ public class AssignmentController {
 	AssignmentRepository assignmentRepository;
 	
 	@Autowired
-	AssignmentGradeRepository assignmentGradeRepository;
+ 	AssignmentGradeRepository assignmentGradeRepository;
 	
+	// get all assignments
+	@GetMapping("/assignment")
+	public AssignmentListDTO getAssignments( ) {
+		
+		List<Assignment> assignments = (List<Assignment>) assignmentRepository.findAll();
+		AssignmentListDTO result = new AssignmentListDTO();
+		for (Assignment a: assignments) {
+			result.assignments.add(new AssignmentListDTO.AssignmentDTO(a.getId(), a.getCourse().getCourse_id(), a.getName(), a.getDueDate().toString() , a.getCourse().getTitle()));
+		}
+		return result;
+	}
 	
 	//Step1: client sends data in post 
 	//---------------------------------
@@ -59,7 +73,7 @@ public class AssignmentController {
 		//----------------------------------
 		
 		// if it is there it will get it 
-		Course c = courseRepository.findById(assignmentDTO.courseId).get();
+		Course c = courseRepository.findById(assignmentDTO.courseId).orElse(null);// if found return or else null 
 		if(c==null) {
 			//invalid assignment error
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Course not found. " + assignmentDTO.courseId);
