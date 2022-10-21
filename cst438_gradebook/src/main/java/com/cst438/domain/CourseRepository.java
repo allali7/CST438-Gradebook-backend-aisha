@@ -7,4 +7,7 @@ import org.springframework.data.repository.query.Param;
 public interface CourseRepository extends CrudRepository <Course, Integer> {
 	@Query("select c from Course c where c.course_id=:course_id")
 	Course findByCourse_id(@Param("course_id") int course_id);
+	
+	@Query("select c from Course c where c.student_email=:student_email")
+	public Course findByStudentEmail(@Param("student_email") String student_email);
 }
